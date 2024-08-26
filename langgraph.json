@@ -1,9 +1,10 @@
 {
-  "node_version": "v20.16.0",
+  "node_version": "20",
   "dockerfile_lines": [],
   "dependencies": ["."],
   "graphs": {
-    "agent": "./graph.ts:graph"
+    "retrieval_graph": "./retrieval-graph/graph.ts:graph",
+    "indexer": "./retrieval-graph/index_graph.ts:graph"
   },
   "env": ".env"
 }

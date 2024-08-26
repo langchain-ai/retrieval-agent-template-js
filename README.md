@@ -2,7 +2,6 @@
 
 This repo offers the basic code structure to get started building LangGraph workflows in JavaScript within LangGraph studio.
 
-
 ## Repo Structure
 
 ```txt
