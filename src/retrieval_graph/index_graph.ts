@@ -6,7 +6,8 @@ import { Document } from "@langchain/core/documents";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
 
-import { IndexState, IndexStateT, makeRetriever } from "./utils/state.js";
+import { IndexState, IndexStateT } from "./state.js";
+import { makeRetriever } from "./retrieval.js";
 
 function ensureDocsHaveUserId(
   docs: Document[],
@@ -28,7 +29,7 @@ async function indexDocs(
   if (!config) {
     throw new Error("Configuration required to run index_docs.");
   }
-  const docs = state["docs"];
+  const docs = state.docs;
   const retriever = await makeRetriever(config);
   const stampedDocs = ensureDocsHaveUserId(docs, config);
 

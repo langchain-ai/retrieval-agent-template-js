@@ -1,17 +1,14 @@
-import { BaseMessage } from "@langchain/core/messages";
-import { RunnableConfig } from "@langchain/core/runnables";
-import { Annotation } from "@langchain/langgraph";
-import { messagesStateReducer } from "@langchain/langgraph";
-import { v4 as uuidv4 } from "uuid";
-import { Client } from "@elastic/elasticsearch";
-import { OpenAIEmbeddings } from "@langchain/openai";
-import { ElasticVectorSearch } from "@langchain/community/vectorstores/elasticsearch";
-import {
-  VectorStoreRetriever,
-} from "@langchain/core/vectorstores";
 import { Document } from "@langchain/core/documents";
-import { ensureConfigurable } from "./configuration.js";
-
+import { BaseMessage } from "@langchain/core/messages";
+import { Annotation, messagesStateReducer } from "@langchain/langgraph";
+import { v4 as uuidv4 } from "uuid";
+/**
+ * Reduces the document array based on the provided new documents or actions.
+ *
+ * @param existing - The existing array of documents.
+ * @param newDocs - The new documents or actions to apply.
+ * @returns The updated array of documents.
+ */
 export function reduceDocs(
   existing?: Document[],
   newDocs?:
@@ -21,59 +18,46 @@ export function reduceDocs(
     | string
     | "delete",
 ) {
+  // Supports deletion by returning an empty array when "delete" is specified
   if (newDocs === "delete") {
     return [];
   }
+  // Supports adding a single string document
   if (typeof newDocs === "string") {
     return [{ pageContent: newDocs, metadata: { id: uuidv4() } }];
   }
+  // User can provide "docs" content in a few different ways
   if (Array.isArray(newDocs)) {
     const coerced: Document[] = [];
     for (const item of newDocs) {
       if (typeof item === "string") {
         coerced.push({ pageContent: item, metadata: { id: uuidv4() } });
       } else if (typeof item === "object") {
-        coerced.push(item as Document);
+        const doc = item as Document;
+        if (!doc.metadata || !doc.metadata.id) {
+          doc.metadata = doc.metadata || {};
+          doc.metadata.id = uuidv4();
+        }
+        coerced.push(doc);
       }
     }
     return coerced;
   }
+  // Returns existing documents if no valid update is provided
   return existing || [];
 }
 
-export async function makeRetriever(
-  config: RunnableConfig,
-): Promise<VectorStoreRetriever> {
-  const configuration = ensureConfigurable(config);
-  const embeddingModel = new OpenAIEmbeddings({
-    model: configuration.embeddingModelName,
-  });
-
-  const userId = configuration.userId;
-  if (!userId) {
-    throw new Error("Please provide a valid user_id in the configuration.");
-  }
-
-  const client = new Client({
-    node: process.env.ELASTICSEARCH_URL,
-    auth: {
-      apiKey: process.env.ELASTICSEARCH_API_KEY || "",
-    },
-  });
-
-  const vectorStore = new ElasticVectorSearch(embeddingModel, {
-    client,
-    indexName: "langchain_index",
-  });
-
-  const searchKwargs = configuration.searchKwargs || {};
-  searchKwargs.filter = searchKwargs.filter || [];
-  searchKwargs.filter.push({ term: { "metadata.user_id": userId } });
-
-  return vectorStore.asRetriever({ searchKwargs });
-}
-
+/**
+ * Defines the structure and behavior of the index state.
+ * This state is used to manage the documents in the index.
+ */
 export const IndexState = Annotation.Root({
+  /**
+   * Stores the documents in the index.
+   * @type {Document[]}
+   * @reducer reduceDocs - Handles updates to the documents array, including adding new documents.
+   * @default An empty array.
+   */
   docs: Annotation<Document[], Document[] | string | string[]>({
     reducer: reduceDocs,
     default: () => [],
@@ -92,11 +76,29 @@ export function addQueries(existing: string[], newQueries: string[]): string[] {
  * See [Reducers](https://langchain-ai.github.io/langgraphjs/concepts/low_level/#reducers) for more information.
  */
 export const State = Annotation.Root({
+  /**
+   * Stores the conversation messages.
+   * @type {BaseMessage[]}
+   * @reducer messagesStateReducer - Handles updates to the messages array.
+   * @default An empty array.
+   */
   messages: Annotation<BaseMessage[]>({
     reducer: messagesStateReducer,
     default: () => [],
   }),
+
+  /**
+   * Stores the user queries.
+   * @type {string[]}
+   * @reducer addQueries - Handles adding new queries to the existing ones.
+   * @default An empty array.
+   */
   queries: Annotation<string[]>({ reducer: addQueries, default: () => [] }),
+
+  /**
+   * Stores the retrieved documents.
+   * @type {Document[]}
+   */
   retrievedDocs: Annotation<Document[]>,
 });
 
