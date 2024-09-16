@@ -2,7 +2,7 @@
   "name": "retrieval-graph",
   "version": "0.0.1",
   "description": "A starter template for creating a LangGraph workflow.",
-  "main": "src/graph.ts",
+  "main": "src/retrieval_graph/graph.ts",
   "author": "Your Name",
   "license": "MIT",
   "private": true,

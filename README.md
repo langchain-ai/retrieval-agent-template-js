@@ -215,27 +215,27 @@ End setup instructions
 
 You can customize this retrieval agent template in several ways:
 
-1. **Change the retriever**: You can switch between different vector stores (Elasticsearch, MongoDB, Pinecone) by modifying the `retriever_provider` in the configuration. Each provider has its own setup instructions in the "Getting Started" section above.
+1. **Change the retriever**: You can switch between different vector stores (Elasticsearch, MongoDB, Pinecone) by modifying the `retrieverProvider` in the configuration. Each provider has its own setup instructions in the "Getting Started" section above.
 
-2. **Modify the embedding model**: You can change the embedding model used for document indexing and query embedding by updating the `embedding_model` in the configuration. Options include various OpenAI and Cohere models.
+2. **Modify the embedding model**: You can change the embedding model used for document indexing and query embedding by updating the `embeddingModel` in the configuration. Options include various OpenAI and Cohere models.
 
-3. **Adjust search parameters**: Fine-tune the retrieval process by modifying the `search_kwargs` in the configuration. This allows you to control aspects like the number of documents retrieved or similarity thresholds.
+3. **Adjust search parameters**: Fine-tune the retrieval process by modifying the `searchKwargs` in the configuration. This allows you to control aspects like the number of documents retrieved or similarity thresholds.
 
-4. **Customize the response generation**: You can modify the `response_system_prompt` to change how the agent formulates its responses. This allows you to adjust the agent's personality or add specific instructions for answer generation.
+4. **Customize the response generation**: You can modify the `responseSystemPrompt` to change how the agent formulates its responses. This allows you to adjust the agent's personality or add specific instructions for answer generation.
 
-5. **Change the language model**: Update the `response_model` in the configuration to use different language models for response generation. Options include various Claude models from Anthropic, as well as models from other providers like Fireworks AI.
+5. **Change the language model**: Update the `responseModel` in the configuration to use different language models for response generation. Options include various Claude models from Anthropic, as well as models from other providers like Fireworks AI.
 
-6. **Extend the graph**: You can add new nodes or modify existing ones in the `src/retrieval_agent/graph.py` file to introduce additional processing steps or decision points in the agent's workflow.
+6. **Extend the graph**: You can add new nodes or modify existing ones in the `src/retrieval_agent/graph.ts` file to introduce additional processing steps or decision points in the agent's workflow.
 
-7. **Add new tools**: Implement new tools or API integrations in `src/retrieval_agent/tools.py` to expand the agent's capabilities beyond simple retrieval and response generation.
+7. **Add new tools**: Implement new tools or API integrations in `src/retrieval_agent/tools.ts` to expand the agent's capabilities beyond simple retrieval and response generation.
 
-8. **Modify prompts**: Update the prompts used for query generation and response formulation in `src/retrieval_agent/prompts.py` to better suit your specific use case or to improve the agent's performance.
+8. **Modify prompts**: Update the prompts used for query generation and response formulation in `src/retrieval_agent/prompts.ts` to better suit your specific use case or to improve the agent's performance.
 
 Remember to test your changes thoroughly to ensure they improve the agent's performance for your specific use case.
 
 ## Development
 
-While iterating on your graph, you can edit past state and rerun your app from past states to debug specific nodes. Local changes will be automatically applied via hot reload. Try adding an interrupt before the agent calls tools, updating the default system message in `src/retrieval_agent/utils.py` to take on a persona, or adding additional nodes and edges!
+While iterating on your graph, you can edit past state and rerun your app from past states to debug specific nodes. Local changes will be automatically applied via hot reload. Try adding an interrupt before the agent calls tools, updating the default system message in `src/retrieval_agent/utils.ts` to take on a persona, or adding additional nodes and edges!
 
 Follow up requests will be appended to the same thread. You can create an entirely new thread, clearing previous history, using the `+` button in the top right.
 

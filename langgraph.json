@@ -3,8 +3,8 @@
   "dockerfile_lines": [],
   "dependencies": ["."],
   "graphs": {
-    "retrieval_graph": "./retrieval-graph/graph.ts:graph",
-    "indexer": "./retrieval-graph/index_graph.ts:graph"
+    "retrieval_graph": "./src/retrieval_graph/graph.ts:graph",
+    "indexer": "./src/retrieval_graph/index_graph.ts:graph"
   },
   "env": ".env"
 }
