@@ -6,7 +6,8 @@ import { Document } from "@langchain/core/documents";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
 
-import { IndexState, IndexStateT, makeRetriever } from "./state.js";
+import { IndexState, IndexStateT } from "./state.js";
+import { makeRetriever } from "./retrieval.js";
 
 function ensureDocsHaveUserId(
   docs: Document[],
