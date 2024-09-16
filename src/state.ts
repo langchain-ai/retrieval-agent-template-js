@@ -6,9 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { Client } from "@elastic/elasticsearch";
 import { OpenAIEmbeddings } from "@langchain/openai";
 import { ElasticVectorSearch } from "@langchain/community/vectorstores/elasticsearch";
-import {
-  VectorStoreRetriever,
-} from "@langchain/core/vectorstores";
+import { VectorStoreRetriever } from "@langchain/core/vectorstores";
 import { Document } from "@langchain/core/documents";
 import { ensureConfigurable } from "./configuration.js";
 

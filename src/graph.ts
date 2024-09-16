@@ -2,9 +2,9 @@ import { initChatModel } from "langchain/chat_models/universal";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
-import { ensureConfigurable } from "./utils/configuration.js";
-import { makeRetriever, State, StateT } from "./utils/state.js";
-import { formatDocs, getMessageText } from "./utils/utils.js";
+import { ensureConfigurable } from "./configuration.js";
+import { makeRetriever, State, StateT } from "./state.js";
+import { formatDocs, getMessageText } from "./utils.js";
 import { z } from "zod";
 // Define the function that calls the model
 

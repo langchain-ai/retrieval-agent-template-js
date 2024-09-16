@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "path": "..",
+    },
+    {
+      "path": "../../retrieval-agent-template",
+    },
+    {
+      "path": "../../startup-plan-enrichment",
+    },
+    {
+      "path": "../../../../langgraphjs",
+    },
+    {
+      "path": "../../empty-repo-js",
+    },
+    {
+      "path": "../react-agent-js",
+    },
+  ],
+  "settings": {},
+}
