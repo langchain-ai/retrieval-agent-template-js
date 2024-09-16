@@ -6,7 +6,8 @@ import { Document } from "@langchain/core/documents";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
 
-import { IndexState, IndexStateT, makeRetriever } from "./utils/state.js";
+import { IndexStateAnnotation, IndexState } from "./state.js";
+import { makeRetriever } from "./retrieval.js";
 
 function ensureDocsHaveUserId(
   docs: Document[],
@@ -22,13 +23,13 @@ function ensureDocsHaveUserId(
 }
 
 async function indexDocs(
-  state: IndexStateT,
+  state: IndexState,
   config?: RunnableConfig,
 ): Promise<{ docs: string }> {
   if (!config) {
     throw new Error("Configuration required to run index_docs.");
   }
-  const docs = state["docs"];
+  const docs = state.docs;
   const retriever = await makeRetriever(config);
   const stampedDocs = ensureDocsHaveUserId(docs, config);
 
@@ -38,7 +39,7 @@ async function indexDocs(
 
 // Define a new graph
 
-const builder = new StateGraph(IndexState)
+const builder = new StateGraph(IndexStateAnnotation)
   .addNode("indexDocs", indexDocs)
   .addEdge("__start__", "indexDocs");
 

@@ -1,11 +1,11 @@
-import { initChatModel } from "langchain/chat_models/universal";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
-import { ensureConfigurable } from "./utils/configuration.js";
-import { makeRetriever, State, StateT } from "./utils/state.js";
-import { formatDocs, getMessageText } from "./utils/utils.js";
+import { ensureConfiguration } from "./configuration.js";
+import { StateAnnotation, State, InputStateAnnotation } from "./state.js";
+import { formatDocs, getMessageText, loadChatModel } from "./utils.js";
 import { z } from "zod";
+import { makeRetriever } from "./retrieval.js";
 // Define the function that calls the model
 
 const SearchQuery = z.object({
@@ -13,7 +13,7 @@ const SearchQuery = z.object({
 });
 
 async function generateQuery(
-  state: StateT,
+  state: State,
   config?: RunnableConfig,
 ): Promise<{ queries: string[] }> {
   const messages = state.messages;
@@ -22,14 +22,14 @@ async function generateQuery(
     const humanInput = getMessageText(messages[messages.length - 1]);
     return { queries: [humanInput] };
   } else {
-    const configuration = ensureConfigurable(config);
+    const configuration = ensureConfiguration(config);
     // Feel free to customize the prompt, model, and other logic!
     const prompt = ChatPromptTemplate.fromMessages([
       ["system", configuration.querySystemPrompt],
       ["placeholder", "{messages}"],
     ]);
     const model = (
-      await initChatModel(configuration.responseModelName)
+      await loadChatModel(configuration.responseModel)
     ).withStructuredOutput(SearchQuery);
 
     const messageValue = await prompt.invoke(
@@ -48,7 +48,7 @@ async function generateQuery(
 }
 
 async function retrieve(
-  state: StateT,
+  state: State,
   config: RunnableConfig,
 ): Promise<{ retrievedDocs: any[] }> {
   const query = state.queries[state.queries.length - 1];
@@ -57,17 +57,17 @@ async function retrieve(
   return { retrievedDocs: response };
 }
 
-async function respond(state: StateT, config: RunnableConfig) {
+async function respond(state: State, config: RunnableConfig) {
   /**
    * Call the LLM powering our "agent".
    */
-  const configuration = ensureConfigurable(config);
+  const configuration = ensureConfiguration(config);
   // Feel free to customize the prompt, model, and other logic!
   const prompt = ChatPromptTemplate.fromMessages([
     ["system", configuration.responseSystemPrompt],
     ["placeholder", "{messages}"],
   ]);
-  const model = await initChatModel(configuration.responseModelName);
+  const model = await loadChatModel(configuration.responseModel);
 
   const retrievedDocs = formatDocs(state.retrievedDocs);
   const messageValue = await prompt.invoke(
@@ -85,7 +85,10 @@ async function respond(state: StateT, config: RunnableConfig) {
 
 // Define a new graph (It's just a pipe)
 
-const builder = new StateGraph(State)
+const builder = new StateGraph({
+  stateSchema: StateAnnotation,
+  input: InputStateAnnotation,
+})
   .addNode("generateQuery", generateQuery)
   .addNode("retrieve", retrieve)
   .addNode("respond", respond)

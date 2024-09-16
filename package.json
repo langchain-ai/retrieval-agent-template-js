@@ -1,8 +1,8 @@
 {
-  "name": "example-graph",
+  "name": "retrieval-graph",
   "version": "0.0.1",
   "description": "A starter template for creating a LangGraph workflow.",
-  "main": "graph.ts",
+  "main": "src/retrieval_graph/graph.ts",
   "author": "Your Name",
   "license": "MIT",
   "private": true,
@@ -16,9 +16,13 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.15.0",
-    "@langchain/community": "^0.2.31",
-    "@langchain/langgraph": "^0.1.2",
-    "langchain": "^0.2.17",
+    "@langchain/anthropic": "^0.3.1",
+    "@langchain/cohere": "^0.3.0",
+    "@langchain/community": "^0.3.0",
+    "@langchain/langgraph": "^0.2.3",
+    "@langchain/mongodb": "^0.1.0",
+    "@langchain/pinecone": "^0.1.0",
+    "langchain": "^0.3.2",
     "ts-node": "^10.9.2"
   },
   "resolutions": {
