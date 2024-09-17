@@ -99,6 +99,6 @@ export function ensureConfiguration(
     responseModel:
       configurable.responseModel || "anthropic/claude-3-5-sonnet-20240620",
     querySystemPrompt: configurable.querySystemPrompt || QUERY_SYSTEM_PROMPT,
-    queryModel: configurable.queryModel || "openai/gpt-4o-mini",
+    queryModel: configurable.queryModel || "anthropic/claude-3-haiku-20240307",
   };
 }
