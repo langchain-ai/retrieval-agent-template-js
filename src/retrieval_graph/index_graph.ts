@@ -9,12 +9,14 @@ import { StateGraph } from "@langchain/langgraph";
 import { IndexStateAnnotation } from "./state.js";
 // import { IndexConfigurationAnnotation } from "./configuration.js";
 import { makeRetriever } from "./retrieval.js";
+import { ensureIndexConfiguration } from "./configuration.js";
 
 function ensureDocsHaveUserId(
   docs: Document[],
-  config: RunnableConfig,
+  config: RunnableConfig
 ): Document[] {
-  const userId = config?.configurable?.user_id;
+  const configuration = ensureIndexConfiguration(config);
+  const userId = configuration.userId;
   return docs.map((doc) => {
     return new Document({
       pageContent: doc.pageContent,
@@ -25,7 +27,7 @@ function ensureDocsHaveUserId(
 
 async function indexDocs(
   state: typeof IndexStateAnnotation.State,
-  config?: RunnableConfig,
+  config?: RunnableConfig
 ): Promise<{ docs: string }> {
   if (!config) {
     throw new Error("ConfigurationAnnotation required to run index_docs.");
@@ -34,7 +36,7 @@ async function indexDocs(
   const retriever = await makeRetriever(config);
   const stampedDocs = ensureDocsHaveUserId(docs, config);
 
-  await retriever.addDocuments(stampedDocs);
+  const results = await retriever.addDocuments(stampedDocs);
   return { docs: "delete" };
 }
 
@@ -43,7 +45,7 @@ async function indexDocs(
 const builder = new StateGraph(
   {
     stateSchema: IndexStateAnnotation,
-  },
+  }
   // IndexConfigurationAnnotation
 )
   .addNode("indexDocs", indexDocs)
