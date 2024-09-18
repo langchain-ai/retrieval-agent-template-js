@@ -3,54 +3,61 @@
  */
 
 import { RunnableConfig } from "@langchain/core/runnables";
-import { RESPONSE_SYSTEM_PROMPT, QUERY_SYSTEM_PROMPT } from "./prompts.js";
+import {
+  RESPONSE_SYSTEM_PROMPT_TEMPLATE,
+  QUERY_SYSTEM_PROMPT_TEMPLATE,
+} from "./prompts.js";
+import { Annotation } from "@langchain/langgraph";
 
 /**
- * Configuration class for indexing and retrieval operations.
+ * typeof ConfigurationAnnotation.State class for indexing and retrieval operations.
  *
- * This interface defines the parameters needed for configuring the indexing and
+ * This annotation defines the parameters needed for configuring the indexing and
  * retrieval processes, including user identification, embedding model selection,
  * retriever provider choice, and search parameters.
  */
-export interface IndexConfiguration {
+export const IndexConfigurationAnnotation = Annotation.Root({
   /**
    * Unique identifier for the user.
    */
-  userId: string;
+  userId: Annotation<string>(),
 
   /**
    * Name of the embedding model to use. Must be a valid embedding model name.
    */
-  embeddingModel: string;
+  embeddingModel: Annotation<string>(),
 
   /**
    * The vector store provider to use for retrieval.
    * Options are 'elastic', 'elastic-local', 'pinecone', or 'mongodb'.
    */
-  retrieverProvider: "elastic" | "elastic-local" | "pinecone" | "mongodb";
+  retrieverProvider: Annotation<
+    "elastic" | "elastic-local" | "pinecone" | "mongodb"
+  >(),
 
   /**
    * Additional keyword arguments to pass to the search function of the retriever.
    */
-  searchKwargs: Record<string, any>;
-}
+  searchKwargs: Annotation<Record<string, any>>(),
+});
 
 /**
- * Create an IndexConfiguration instance from a RunnableConfig object.
+ * Create an typeof IndexConfigurationAnnotation.State instance from a RunnableConfig object.
  *
  * @param config - The configuration object to use.
- * @returns An instance of IndexConfiguration with the specified configuration.
+ * @returns An instance of typeof IndexConfigurationAnnotation.State with the specified configuration.
  */
 export function ensureIndexConfiguration(
   config: RunnableConfig | undefined = undefined,
-): IndexConfiguration {
-  const configurable = (config?.configurable ||
-    {}) as Partial<IndexConfiguration>;
+): typeof IndexConfigurationAnnotation.State {
+  const configurable = (config?.configurable || {}) as Partial<
+    typeof IndexConfigurationAnnotation.State
+  >;
   return {
     userId: configurable.userId || "default", // Give a default user for shared docs
     embeddingModel:
       configurable.embeddingModel || "openai/text-embedding-3-small",
-    retrieverProvider: configurable.retrieverProvider || "elastic",
+    retrieverProvider: configurable.retrieverProvider || "mongodb",
     searchKwargs: configurable.searchKwargs || {},
   };
 }
@@ -58,47 +65,52 @@ export function ensureIndexConfiguration(
 /**
  * The complete configuration for the agent.
  */
-export interface Configuration extends IndexConfiguration {
+export const ConfigurationAnnotation = Annotation.Root({
+  ...IndexConfigurationAnnotation.spec,
   /**
    * The system prompt used for generating responses.
    */
-  responseSystemPrompt: string;
+  responseSystemPromptTemplate: Annotation<string>,
 
   /**
    * The language model used for generating responses. Should be in the form: provider/model-name.
    */
-  responseModel: string;
+  responseModel: Annotation<string>,
 
   /**
    * The system prompt used for processing and refining queries.
    */
-  querySystemPrompt: string;
+  querySystemPromptTemplate: Annotation<string>,
 
   /**
    * The language model used for processing and refining queries. Should be in the form: provider/model-name.
    */
-  queryModel: string;
-}
+  queryModel: Annotation<string>,
+});
 
 /**
- * Create a Configuration instance from a RunnableConfig object.
+ * Create a typeof ConfigurationAnnotation.State instance from a RunnableConfig object.
  *
  * @param config - The configuration object to use.
- * @returns An instance of Configuration with the specified configuration.
+ * @returns An instance of typeof ConfigurationAnnotation.State with the specified configuration.
  */
 export function ensureConfiguration(
   config: RunnableConfig | undefined = undefined,
-): Configuration {
+): typeof ConfigurationAnnotation.State {
   const indexConfig = ensureIndexConfiguration(config);
-  const configurable = (config?.configurable || {}) as Partial<Configuration>;
+  const configurable = (config?.configurable || {}) as Partial<
+    typeof ConfigurationAnnotation.State
+  >;
 
   return {
     ...indexConfig,
-    responseSystemPrompt:
-      configurable.responseSystemPrompt || RESPONSE_SYSTEM_PROMPT,
+    responseSystemPromptTemplate:
+      configurable.responseSystemPromptTemplate ||
+      RESPONSE_SYSTEM_PROMPT_TEMPLATE,
     responseModel:
       configurable.responseModel || "anthropic/claude-3-5-sonnet-20240620",
-    querySystemPrompt: configurable.querySystemPrompt || QUERY_SYSTEM_PROMPT,
+    querySystemPromptTemplate:
+      configurable.querySystemPromptTemplate || QUERY_SYSTEM_PROMPT_TEMPLATE,
     queryModel: configurable.queryModel || "anthropic/claude-3-haiku-20240307",
   };
 }
