@@ -1,8 +1,11 @@
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
-import { ensureConfiguration } from "./configuration.js";
-import { StateAnnotation, State, InputStateAnnotation } from "./state.js";
+import {
+  ConfigurationAnnotation,
+  ensureConfiguration,
+} from "./configuration.js";
+import { StateAnnotation, InputStateAnnotation } from "./state.js";
 import { formatDocs, getMessageText, loadChatModel } from "./utils.js";
 import { z } from "zod";
 import { makeRetriever } from "./retrieval.js";
@@ -13,7 +16,7 @@ const SearchQuery = z.object({
 });
 
 async function generateQuery(
-  state: State,
+  state: typeof StateAnnotation.State,
   config?: RunnableConfig,
 ): Promise<{ queries: string[] }> {
   const messages = state.messages;
@@ -25,7 +28,7 @@ async function generateQuery(
     const configuration = ensureConfiguration(config);
     // Feel free to customize the prompt, model, and other logic!
     const prompt = ChatPromptTemplate.fromMessages([
-      ["system", configuration.querySystemPrompt],
+      ["system", configuration.querySystemPromptTemplate],
       ["placeholder", "{messages}"],
     ]);
     const model = (
@@ -48,7 +51,7 @@ async function generateQuery(
 }
 
 async function retrieve(
-  state: State,
+  state: typeof StateAnnotation.State,
   config: RunnableConfig,
 ): Promise<{ retrievedDocs: any[] }> {
   const query = state.queries[state.queries.length - 1];
@@ -57,14 +60,17 @@ async function retrieve(
   return { retrievedDocs: response };
 }
 
-async function respond(state: State, config: RunnableConfig) {
+async function respond(
+  state: typeof StateAnnotation.State,
+  config: RunnableConfig,
+) {
   /**
    * Call the LLM powering our "agent".
    */
   const configuration = ensureConfiguration(config);
   // Feel free to customize the prompt, model, and other logic!
   const prompt = ChatPromptTemplate.fromMessages([
-    ["system", configuration.responseSystemPrompt],
+    ["system", configuration.responseSystemPromptTemplate],
     ["placeholder", "{messages}"],
   ]);
   const model = await loadChatModel(configuration.responseModel);
@@ -85,10 +91,14 @@ async function respond(state: State, config: RunnableConfig) {
 
 // Define a new graph (It's just a pipe)
 
-const builder = new StateGraph({
-  stateSchema: StateAnnotation,
-  input: InputStateAnnotation,
-})
+const builder = new StateGraph(
+  {
+    stateSchema: StateAnnotation,
+    // Just the user
+    input: InputStateAnnotation,
+  },
+  // ConfigurationAnnotation
+)
   .addNode("generateQuery", generateQuery)
   .addNode("retrieve", retrieve)
   .addNode("respond", respond)
@@ -102,3 +112,5 @@ export const graph = builder.compile({
   interruptBefore: [], // if you want to update the state before calling the tools
   interruptAfter: [],
 });
+
+graph.name = "Retrieval Graph"; // Customizes the name displayed in LangSmith

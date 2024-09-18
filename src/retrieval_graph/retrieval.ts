@@ -15,17 +15,34 @@ async function makeElasticRetriever(
   configuration: ReturnType<typeof ensureConfiguration>,
   embeddingModel: Embeddings,
 ): Promise<VectorStoreRetriever> {
+  const elasticUrl = process.env.ELASTICSEARCH_URL;
+  if (!elasticUrl) {
+    throw new Error("ELASTICSEARCH_URL environment variable is not defined");
+  }
+
+  let auth: { username: string; password: string } | { apiKey: string };
+  if (configuration.retrieverProvider === "elastic-local") {
+    const username = process.env.ELASTICSEARCH_USER;
+    const password = process.env.ELASTICSEARCH_PASSWORD;
+    if (!username || !password) {
+      throw new Error(
+        "ELASTICSEARCH_USER or ELASTICSEARCH_PASSWORD environment variable is not defined",
+      );
+    }
+    auth = { username, password };
+  } else {
+    const apiKey = process.env.ELASTICSEARCH_API_KEY;
+    if (!apiKey) {
+      throw new Error(
+        "ELASTICSEARCH_API_KEY environment variable is not defined",
+      );
+    }
+    auth = { apiKey };
+  }
+
   const client = new Client({
-    node: process.env.ELASTICSEARCH_URL,
-    auth:
-      configuration.retrieverProvider === "elastic-local"
-        ? {
-            username: process.env.ELASTICSEARCH_USER || "",
-            password: process.env.ELASTICSEARCH_PASSWORD || "",
-          }
-        : {
-            apiKey: process.env.ELASTICSEARCH_API_KEY || "",
-          },
+    node: elasticUrl,
+    auth,
   });
 
   const vectorStore = new ElasticVectorSearch(embeddingModel, {
@@ -51,7 +68,7 @@ async function makePineconeRetriever(
     throw new Error("PINECONE_INDEX_NAME environment variable is not defined");
   }
   const pinecone = new PineconeClient();
-  const pineconeIndex = pinecone.Index(process.env.PINECONE_INDEX!);
+  const pineconeIndex = pinecone.Index(indexName!);
   const vectorStore = await PineconeStore.fromExistingIndex(embeddingModel, {
     pineconeIndex,
   });
@@ -67,13 +84,17 @@ async function makeMongoDBRetriever(
   configuration: ReturnType<typeof ensureConfiguration>,
   embeddingModel: Embeddings,
 ): Promise<VectorStoreRetriever> {
-  const client = new MongoClient(process.env.MONGODB_ATLAS_URI || "");
+  if (!process.env.MONGODB_URI) {
+    throw new Error("MONGODB_URI environment variable is not defined");
+  }
+  const client = new MongoClient(process.env.MONGODB_URI);
   const namespace = `langgraph_retrieval_agent.${configuration.userId}`;
+  console.warn("CONNSTR", process.env.MONGODB_URI);
+  console.warn("namesapce", namespace);
   const [dbName, collectionName] = namespace.split(".");
   const collection = client.db(dbName).collection(collectionName);
   const vectorStore = new MongoDBAtlasVectorSearch(embeddingModel, {
     collection: collection,
-    indexName: process.env.MONGODB_INDEX_NAME || "",
     textKey: "text",
     embeddingKey: "embedding",
   });

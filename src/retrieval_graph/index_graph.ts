@@ -6,7 +6,8 @@ import { Document } from "@langchain/core/documents";
 import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
 
-import { IndexStateAnnotation, IndexState } from "./state.js";
+import { IndexStateAnnotation } from "./state.js";
+// import { IndexConfigurationAnnotation } from "./configuration.js";
 import { makeRetriever } from "./retrieval.js";
 
 function ensureDocsHaveUserId(
@@ -23,11 +24,11 @@ function ensureDocsHaveUserId(
 }
 
 async function indexDocs(
-  state: IndexState,
+  state: typeof IndexStateAnnotation.State,
   config?: RunnableConfig,
 ): Promise<{ docs: string }> {
   if (!config) {
-    throw new Error("Configuration required to run index_docs.");
+    throw new Error("ConfigurationAnnotation required to run index_docs.");
   }
   const docs = state.docs;
   const retriever = await makeRetriever(config);
@@ -39,10 +40,17 @@ async function indexDocs(
 
 // Define a new graph
 
-const builder = new StateGraph(IndexStateAnnotation)
+const builder = new StateGraph(
+  {
+    stateSchema: IndexStateAnnotation,
+  },
+  // IndexConfigurationAnnotation
+)
   .addNode("indexDocs", indexDocs)
   .addEdge("__start__", "indexDocs");
 
 // Finally, we compile it!
 // This compiles it into a graph you can invoke and deploy.
 export const graph = builder.compile();
+
+graph.name = "Index Graph"; // Customizes the name displayed in LangSmith

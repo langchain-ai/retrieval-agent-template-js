@@ -1,6 +1,6 @@
 import { Document } from "@langchain/core/documents";
 import { BaseMessage } from "@langchain/core/messages";
-import { Annotation, messagesStateReducer } from "@langchain/langgraph";
+import { Annotation, MessagesAnnotation } from "@langchain/langgraph";
 import { v4 as uuidv4 } from "uuid";
 /**
  * Reduces the document array based on the provided new documents or actions.
@@ -24,7 +24,8 @@ export function reduceDocs(
   }
   // Supports adding a single string document
   if (typeof newDocs === "string") {
-    return [{ pageContent: newDocs, metadata: { id: uuidv4() } }];
+    const docId = uuidv4();
+    return [{ pageContent: newDocs, metadata: { id: docId }, id: docId }];
   }
   // User can provide "docs" content in a few different ways
   if (Array.isArray(newDocs)) {
@@ -34,9 +35,11 @@ export function reduceDocs(
         coerced.push({ pageContent: item, metadata: { id: uuidv4() } });
       } else if (typeof item === "object") {
         const doc = item as Document;
+        const docId = item?.id || uuidv4();
+        item.id = docId;
         if (!doc.metadata || !doc.metadata.id) {
           doc.metadata = doc.metadata || {};
-          doc.metadata.id = uuidv4();
+          doc.metadata.id = docId;
         }
         coerced.push(doc);
       }
@@ -54,19 +57,21 @@ export function reduceDocs(
 export const IndexStateAnnotation = Annotation.Root({
   /**
    * Stores the documents in the index.
-   * @type {Document[]}
-   * @reducer reduceDocs - Handles updates to the documents array, including adding new documents.
-   * @default An empty array.
+   *
+   * @type {Document[]} - An array of Document objects.
+   * @reducer reduceDocs - A function that handles updates to the documents array.
+   *                       It can add new documents, replace existing ones, or delete all documents.
+   * @default An empty array ([]).
+   * @see reduceDocs for detailed behavior on how updates are processed.
    */
-  docs: Annotation<Document[], Document[] | string | string[]>({
+  docs: Annotation<
+    Document[],
+    Document[] | { [key: string]: any }[] | string[] | string | "delete"
+  >({
     reducer: reduceDocs,
     default: () => [],
   }),
 });
-export type IndexState = typeof IndexStateAnnotation.State;
-export function addQueries(existing: string[], newQueries: string[]): string[] {
-  return [...existing, ...newQueries];
-}
 
 /**
  * This narrows the interface with the user.
@@ -86,21 +91,57 @@ export const StateAnnotation = Annotation.Root({
   /**
    * Stores the conversation messages.
    * @type {BaseMessage[]}
-   * @reducer messagesStateReducer - Handles updates to the messages array.
+   * @reducer Default reducer that appends new messages to the existing ones.
    * @default An empty array.
+   *
+   * Nodes can return a list of "MessageLike" objects, which can be LangChain messages
+   * or dictionaries following a common message format.
+   *
+   * To delete messages, use RemoveMessage.
+   * @see https://langchain-ai.github.io/langgraphjs/how-tos/delete-messages/
+   *
+   * For more information, see:
+   * @see https://langchain-ai.github.io/langgraphjs/reference/variables/langgraph.MessagesAnnotation.html
    */
-  messages: Annotation<BaseMessage[]>({
-    reducer: messagesStateReducer,
-    default: () => [],
-  }),
+  ...MessagesAnnotation.spec,
 
   /**
    * Stores the user queries.
    * @type {string[]}
-   * @reducer addQueries - Handles adding new queries to the existing ones.
-   * @default An empty array.
+   * @reducer A custom reducer function that appends new queries to the existing array.
+   *          It handles both single string and string array inputs.
+   * @default An empty array ([]).
+   * @description This annotation manages the list of user queries in the state.
+   *              It uses a reducer to add new queries while preserving existing ones.
+   *              The reducer supports adding either a single query (string) or multiple queries (string[]).
    */
-  queries: Annotation<string[]>({ reducer: addQueries, default: () => [] }),
+  queries: Annotation<string[], string | string[]>({
+    reducer: (existing: string[], newQueries: string[] | string) => {
+      /**
+       * This reducer is currently "append only" - it only adds new queries to the existing list.
+       *
+       * To extend this reducer to support more complex operations, you could modify it in ways like this:
+       *
+       * reducer: (existing: string[], action: { type: string; payload: string | string[] }) => {
+       *   switch (action.type) {
+       *     case 'ADD':
+       *       return [...existing, ...(Array.isArray(action.payload) ? action.payload : [action.payload])];
+       *     case 'DELETE':
+       *       return existing.filter(query => query !== action.payload);
+       *     case 'REPLACE':
+       *       return Array.isArray(action.payload) ? action.payload : [action.payload];
+       *     default:
+       *       return existing;
+       *   }
+       * }
+       */
+      return [
+        ...existing,
+        ...(Array.isArray(newQueries) ? newQueries : [newQueries]),
+      ];
+    },
+    default: () => [],
+  }),
 
   /**
    * Stores the retrieved documents.
@@ -108,5 +149,3 @@ export const StateAnnotation = Annotation.Root({
    */
   retrievedDocs: Annotation<Document[]>,
 });
-
-export type State = typeof StateAnnotation.State;
