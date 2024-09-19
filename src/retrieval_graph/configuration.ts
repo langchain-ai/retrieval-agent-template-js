@@ -1,7 +1,6 @@
 /**
  * Define the configurable parameters for the agent.
  */
-
 import { RunnableConfig } from "@langchain/core/runnables";
 import {
   RESPONSE_SYSTEM_PROMPT_TEMPLATE,
@@ -20,12 +19,12 @@ export const IndexConfigurationAnnotation = Annotation.Root({
   /**
    * Unique identifier for the user.
    */
-  userId: Annotation<string>(),
+  userId: Annotation<string>,
 
   /**
    * Name of the embedding model to use. Must be a valid embedding model name.
    */
-  embeddingModel: Annotation<string>(),
+  embeddingModel: Annotation<string>,
 
   /**
    * The vector store provider to use for retrieval.
@@ -33,12 +32,13 @@ export const IndexConfigurationAnnotation = Annotation.Root({
    */
   retrieverProvider: Annotation<
     "elastic" | "elastic-local" | "pinecone" | "mongodb"
-  >(),
+  >,
 
   /**
    * Additional keyword arguments to pass to the search function of the retriever.
    */
-  searchKwargs: Annotation<Record<string, any>>(),
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  searchKwargs: Annotation<Record<string, any>>,
 });
 
 /**
@@ -57,7 +57,7 @@ export function ensureIndexConfiguration(
     userId: configurable.userId || "default", // Give a default user for shared docs
     embeddingModel:
       configurable.embeddingModel || "openai/text-embedding-3-small",
-    retrieverProvider: configurable.retrieverProvider || "mongodb",
+    retrieverProvider: configurable.retrieverProvider || "elastic",
     searchKwargs: configurable.searchKwargs || {},
   };
 }

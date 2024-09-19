@@ -13,7 +13,7 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 
 async function makeElasticRetriever(
   configuration: ReturnType<typeof ensureConfiguration>,
-  embeddingModel: Embeddings
+  embeddingModel: Embeddings,
 ): Promise<VectorStoreRetriever> {
   const elasticUrl = process.env.ELASTICSEARCH_URL;
   if (!elasticUrl) {
@@ -26,7 +26,7 @@ async function makeElasticRetriever(
     const password = process.env.ELASTICSEARCH_PASSWORD;
     if (!username || !password) {
       throw new Error(
-        "ELASTICSEARCH_USER or ELASTICSEARCH_PASSWORD environment variable is not defined"
+        "ELASTICSEARCH_USER or ELASTICSEARCH_PASSWORD environment variable is not defined",
       );
     }
     auth = { username, password };
@@ -34,7 +34,7 @@ async function makeElasticRetriever(
     const apiKey = process.env.ELASTICSEARCH_API_KEY;
     if (!apiKey) {
       throw new Error(
-        "ELASTICSEARCH_API_KEY environment variable is not defined"
+        "ELASTICSEARCH_API_KEY environment variable is not defined",
       );
     }
     auth = { apiKey };
@@ -49,19 +49,18 @@ async function makeElasticRetriever(
     client,
     indexName: "langchain_index",
   });
-
   const searchKwargs = configuration.searchKwargs || {};
-  searchKwargs.filter = searchKwargs.filter || [];
-  searchKwargs.filter.push({
-    term: { "metadata.user_id": configuration.userId },
-  });
+  const filter = {
+    ...searchKwargs,
+    user_id: configuration.userId,
+  };
 
-  return vectorStore.asRetriever({ searchKwargs });
+  return vectorStore.asRetriever({ filter });
 }
 
 async function makePineconeRetriever(
   configuration: ReturnType<typeof ensureConfiguration>,
-  embeddingModel: Embeddings
+  embeddingModel: Embeddings,
 ): Promise<VectorStoreRetriever> {
   const indexName = process.env.PINECONE_INDEX_NAME;
   if (!indexName) {
@@ -74,15 +73,17 @@ async function makePineconeRetriever(
   });
 
   const searchKwargs = configuration.searchKwargs || {};
-  searchKwargs.filter = searchKwargs.filter || {};
-  searchKwargs.filter.user_id = configuration.userId;
+  const filter = {
+    ...searchKwargs,
+    user_id: configuration.userId,
+  };
 
-  return vectorStore.asRetriever({ searchKwargs });
+  return vectorStore.asRetriever({ filter });
 }
 
 async function makeMongoDBRetriever(
   configuration: ReturnType<typeof ensureConfiguration>,
-  embeddingModel: Embeddings
+  embeddingModel: Embeddings,
 ): Promise<VectorStoreRetriever> {
   if (!process.env.MONGODB_URI) {
     throw new Error("MONGODB_URI environment variable is not defined");
@@ -105,7 +106,7 @@ async function makeMongoDBRetriever(
   return vectorStore.asRetriever({ filter: searchKwargs });
 }
 
-function makeTextEncoder(modelName: string): Embeddings {
+function makeTextEmbeddings(modelName: string): Embeddings {
   /**
    * Connect to the configured text encoder.
    */
@@ -129,10 +130,10 @@ function makeTextEncoder(modelName: string): Embeddings {
 }
 
 export async function makeRetriever(
-  config: RunnableConfig
+  config: RunnableConfig,
 ): Promise<VectorStoreRetriever> {
   const configuration = ensureConfiguration(config);
-  const embeddingModel = makeTextEncoder(configuration.embeddingModel);
+  const embeddingModel = makeTextEmbeddings(configuration.embeddingModel);
 
   const userId = configuration.userId;
   if (!userId) {
@@ -149,7 +150,7 @@ export async function makeRetriever(
       return makeMongoDBRetriever(configuration, embeddingModel);
     default:
       throw new Error(
-        `Unrecognized retrieverProvider in configuration: ${configuration.retrieverProvider}`
+        `Unrecognized retrieverProvider in configuration: ${configuration.retrieverProvider}`,
       );
   }
 }
