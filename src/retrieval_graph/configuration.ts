@@ -57,7 +57,7 @@ export function ensureIndexConfiguration(
     userId: configurable.userId || "default", // Give a default user for shared docs
     embeddingModel:
       configurable.embeddingModel || "openai/text-embedding-3-small",
-    retrieverProvider: configurable.retrieverProvider || "mongodb",
+    retrieverProvider: configurable.retrieverProvider || "elastic",
     searchKwargs: configurable.searchKwargs || {},
   };
 }
