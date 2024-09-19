@@ -2,6 +2,7 @@ import { Document } from "@langchain/core/documents";
 import { BaseMessage } from "@langchain/core/messages";
 import { Annotation, MessagesAnnotation } from "@langchain/langgraph";
 import { v4 as uuidv4 } from "uuid";
+
 /**
  * Reduces the document array based on the provided new documents or actions.
  *
@@ -13,6 +14,7 @@ export function reduceDocs(
   existing?: Document[],
   newDocs?:
     | Document[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     | { [key: string]: any }[]
     | string[]
     | string
@@ -66,6 +68,7 @@ export const IndexStateAnnotation = Annotation.Root({
    */
   docs: Annotation<
     Document[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Document[] | { [key: string]: any }[] | string[] | string | "delete"
   >({
     reducer: reduceDocs,

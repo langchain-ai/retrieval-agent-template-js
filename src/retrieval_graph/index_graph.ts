@@ -7,13 +7,15 @@ import { RunnableConfig } from "@langchain/core/runnables";
 import { StateGraph } from "@langchain/langgraph";
 
 import { IndexStateAnnotation } from "./state.js";
-// import { IndexConfigurationAnnotation } from "./configuration.js";
 import { makeRetriever } from "./retrieval.js";
-import { ensureIndexConfiguration } from "./configuration.js";
+import {
+  ensureIndexConfiguration,
+  IndexConfigurationAnnotation,
+} from "./configuration.js";
 
 function ensureDocsHaveUserId(
   docs: Document[],
-  config: RunnableConfig
+  config: RunnableConfig,
 ): Document[] {
   const configuration = ensureIndexConfiguration(config);
   const userId = configuration.userId;
@@ -27,8 +29,8 @@ function ensureDocsHaveUserId(
 
 async function indexDocs(
   state: typeof IndexStateAnnotation.State,
-  config?: RunnableConfig
-): Promise<{ docs: string }> {
+  config?: RunnableConfig,
+): Promise<typeof IndexStateAnnotation.Update> {
   if (!config) {
     throw new Error("ConfigurationAnnotation required to run index_docs.");
   }
@@ -36,17 +38,15 @@ async function indexDocs(
   const retriever = await makeRetriever(config);
   const stampedDocs = ensureDocsHaveUserId(docs, config);
 
-  const results = await retriever.addDocuments(stampedDocs);
+  await retriever.addDocuments(stampedDocs);
   return { docs: "delete" };
 }
 
 // Define a new graph
 
 const builder = new StateGraph(
-  {
-    stateSchema: IndexStateAnnotation,
-  }
-  // IndexConfigurationAnnotation
+  IndexStateAnnotation,
+  IndexConfigurationAnnotation,
 )
   .addNode("indexDocs", indexDocs)
   .addEdge("__start__", "indexDocs");
