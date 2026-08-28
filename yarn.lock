@@ -877,26 +877,27 @@
   dependencies:
     "@jridgewell/trace-mapping" "0.3.9"
 
-"@elastic/elasticsearch@^8.15.0":
-  version "8.15.0"
-  resolved "https://registry.yarnpkg.com/@elastic/elasticsearch/-/elasticsearch-8.15.0.tgz#cb29b3ae33203c545d435cf3dc4b557c8b4961d5"
-  integrity sha512-mG90EMdTDoT6GFSdqpUAhWK9LGuiJo6tOWqs0Usd/t15mPQDj7ZqHXfCBqNkASZpwPZpbAYVjd57S6nbUBINCg==
+"@elastic/elasticsearch@^9.5.0":
+  version "9.5.0"
+  resolved "https://registry.yarnpkg.com/@elastic/elasticsearch/-/elasticsearch-9.5.0.tgz#97699f53a9dccbc83281c7c6ca9a3c7310af4f1b"
+  integrity sha512-6PApbQaAgVHpOvZJrAUSMrU+Nm2PznuIuTUoV29jCezL9Yze1keptiTvtsMqBsnw8v8wvfN6e4L1RTlwa5624A==
   dependencies:
-    "@elastic/transport" "^8.7.0"
+    "@elastic/transport" "^9.4.0"
     tslib "^2.4.0"
 
-"@elastic/transport@^8.7.0":
-  version "8.7.1"
-  resolved "https://registry.yarnpkg.com/@elastic/transport/-/transport-8.7.1.tgz#b380f0b90ee98ff84892c0958b94477cfbf84a05"
-  integrity sha512-2eeMVkz57Ayxv+UAZkIKzzrUu7nm96jr3+N3kLfbBqALYe2jwDpLr9pR0jc/x9HyJKAM909YGaNlHFDZeb0+Mw==
+"@elastic/transport@^9.4.0":
+  version "9.4.0"
+  resolved "https://registry.yarnpkg.com/@elastic/transport/-/transport-9.4.0.tgz#728477a0ccf506bae14c418d72e461240fbbaf17"
+  integrity sha512-/lE1rEPoXWjbQD1pAFyI/zZuMU1XdsxYgfZIAbQGgDabhinKYpZbQh6Qc/dYS6tEPxHOqlJ/WSQvSHZap4+I+w==
   dependencies:
     "@opentelemetry/api" "1.x"
-    debug "^4.3.4"
-    hpagent "^1.0.0"
+    "@opentelemetry/core" "2.x"
+    debug "^4.4.1"
+    hpagent "^1.2.0"
     ms "^2.1.3"
-    secure-json-parse "^2.4.0"
-    tslib "^2.4.0"
-    undici "^6.12.0"
+    secure-json-parse "^4.0.0"
+    tslib "^2.8.1"
+    undici "^7.19.1"
 
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
@@ -1399,6 +1400,18 @@
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/api/-/api-1.9.0.tgz#d03eba68273dc0f7509e2a3d5cba21eae10379fe"
   integrity sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==
+
+"@opentelemetry/core@2.x":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/core/-/core-2.10.0.tgz#aa77f7138e74ba5399d5f3bb0deade0c168f00b2"
+  integrity sha512-/wNZ8twnEQQA4HoHu22+vcsdru6pWPWxW+7w+FlxT6Id7PE/WIbZmVKkte+PF72e0F2dnImFeHD2syyE1Mw6MQ==
+  dependencies:
+    "@opentelemetry/semantic-conventions" "^1.29.0"
+
+"@opentelemetry/semantic-conventions@^1.29.0":
+  version "1.43.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.43.0.tgz#f3f467e36c27332f0e735ec86cdcd78dd6f27865"
+  integrity sha512-eSYWTm620tTk45EKSedaUL8MFYI8hW164hIXsgIHyxu3VobUB3fFCu5t0hQby6OoWRPsG1KkKUG2M5UadiLiVg==
 
 "@pinecone-database/pinecone@^4.1.0":
   version "4.1.0"
@@ -2800,6 +2813,13 @@ debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4:
   dependencies:
     ms "^2.1.3"
 
+debug@^4.4.1:
+  version "4.4.3"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.3.tgz#c6ae432d9bd9662582fce08709b038c58e9e3d6a"
+  integrity sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA==
+  dependencies:
+    ms "^2.1.3"
+
 decamelize@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -3622,7 +3642,7 @@ hasown@^2.0.0, hasown@^2.0.1, hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
-hpagent@^1.0.0:
+hpagent@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hpagent/-/hpagent-1.2.0.tgz#0ae417895430eb3770c03443456b8d90ca464903"
   integrity sha512-A91dYTeIB6NoXG+PxTQpCCDDnfHsW9kc06Lvpu1TEe9gnd6ZFeiBoRO9JvzEv6xK7EX97/dUE8g/vBMTqTS3CA==
@@ -5039,10 +5059,10 @@ safe-regex-test@^1.0.3:
     es-errors "^1.3.0"
     is-regex "^1.1.4"
 
-secure-json-parse@^2.4.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/secure-json-parse/-/secure-json-parse-2.7.0.tgz#5a5f9cd6ae47df23dba3151edd06855d47e09862"
-  integrity sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==
+secure-json-parse@^4.0.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/secure-json-parse/-/secure-json-parse-4.1.0.tgz#4f1ab41c67a13497ea1b9131bb4183a22865477c"
+  integrity sha512-l4KnYfEyqYJxDwlNVyRfO2E4NTHfMKAWdUuA8J0yve2Dz/E/PdBepY03RvyJpssIpRFwJoCD55wA+mEDs6ByWA==
 
 semver@^6.3.0, semver@^6.3.1:
   version "6.3.1"
@@ -5357,10 +5377,10 @@ tslib@^1.11.1, tslib@^1.8.1:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.3.1, tslib@^2.4.0, tslib@^2.5.0, tslib@^2.6.2:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.7.0.tgz#d9b40c5c40ab59e8738f297df3087bf1a2690c01"
-  integrity sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==
+tslib@^2.3.1, tslib@^2.4.0, tslib@^2.5.0, tslib@^2.6.2, tslib@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
+  integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
 tsutils@^3.21.0:
   version "3.21.0"
@@ -5465,10 +5485,10 @@ undici-types@~6.21.0:
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.21.0.tgz#691d00af3909be93a7faa13be61b3a5b50ef12cb"
   integrity sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==
 
-undici@^6.12.0:
-  version "6.19.8"
-  resolved "https://registry.yarnpkg.com/undici/-/undici-6.19.8.tgz#002d7c8a28f8cc3a44ff33c3d4be4d85e15d40e1"
-  integrity sha512-U8uCCl2x9TK3WANvmBavymRzxbfFYG+tAu+fgx3zxQy3qdagQqBLwJVrdyO1TBfUXvfKveMKJZhpvUYoOjM+4g==
+undici@^7.19.1:
+  version "7.29.0"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-7.29.0.tgz#ae0f6f62e06e057a9cbb7b2b5fde2bb74f791b8f"
+  integrity sha512-IDxfleLmmbSskfWSUATiN1nfn2rDuvnMOqb5CWR92iIfojA0Ud+ulOAAEQ57LPr9rWmsreUyf5lwyao+7GNNVw==
 
 update-browserslist-db@^1.1.0:
   version "1.1.0"
