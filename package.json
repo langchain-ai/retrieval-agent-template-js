@@ -28,7 +28,7 @@
     "@langchain/pinecone": "^1.0.3",
     "@pinecone-database/pinecone": "^8.2.0",
     "langchain": "^1.5.10",
-    "mongodb": "^6.21.0",
+    "mongodb": "^7.6.0",
     "ts-node": "^10.9.2",
     "uuid": "^14.0.2",
     "zod": "^4.5.1"
