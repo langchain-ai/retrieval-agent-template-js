@@ -40,7 +40,7 @@
     "@tsconfig/recommended": "^1.0.13",
     "@types/jest": "^29.5.14",
     "@typescript-eslint/eslint-plugin": "^8.68.0",
-    "@typescript-eslint/parser": "^8.68.0",
+    "@typescript-eslint/parser": "^8.69.0",
     "dotenv": "^17.4.2",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",
