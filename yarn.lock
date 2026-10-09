@@ -1097,24 +1097,24 @@
   resolved "https://registry.npmjs.org/@langchain/langgraph-checkpoint/-/langgraph-checkpoint-1.1.5.tgz#c793177f9afcce31a1e9922f317f88fec1254282"
   integrity sha512-BwDwl5VeTOh6CVuiIPgsUgfK51vTJDMSbFcSCUfjJWsl8/DPdK/mbv+ejxJstkSk/BlSPMP4JfXWcN6jD2ea2Q==
 
-"@langchain/langgraph-sdk@~1.10.0":
-  version "1.10.0"
-  resolved "https://registry.npmjs.org/@langchain/langgraph-sdk/-/langgraph-sdk-1.10.0.tgz#6ec1364a97caf615983161ae1f00b196897b9cd6"
-  integrity sha512-cPPkh+hMNgeOaGtJRrqs1AjZde45cG2+Ma9Sc10wz2RyvT8SKToCKS+VvkS18SsLajnmq6/FKVmthq6rnUVYOw==
+"@langchain/langgraph-sdk@~1.12.1":
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph-sdk/-/langgraph-sdk-1.12.3.tgz#a30d94308f40971f2f31cf027f26d12ed7072afd"
+  integrity sha512-o5Qd1pepsJKHmHGIcWhOlZe2fvlPs2AEkVOxqzbL3R8IiMBPH2gNG8/kwK36czEnagiJtu4RUn02mKbGRwd5dQ==
   dependencies:
     "@langchain/protocol" "^0.0.19"
     "@types/json-schema" "^7.0.15"
     p-queue "^9.0.1"
     p-retry "^7.1.1"
 
-"@langchain/langgraph@^1.4.10", "@langchain/langgraph@^1.4.13":
-  version "1.4.13"
-  resolved "https://registry.npmjs.org/@langchain/langgraph/-/langgraph-1.4.13.tgz#168ab4f05c212fd5ab4b2816bcad2e963b345101"
-  integrity sha512-LO1ak6jNQ9jR13tm7Ay4Yh2/otrH7LNVUwWTAI7WJigVdW5Fb6LuYSZUzVn4S7sVSiyVFfnrUcDTd8c7eAzPrQ==
+"@langchain/langgraph@^1.4.10", "@langchain/langgraph@^1.4.19":
+  version "1.4.19"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph/-/langgraph-1.4.19.tgz#05ff3ed892c2eb55fbd20d6075fa4629499a043c"
+  integrity sha512-wfT1Nyfwnu/N56piXRXxX6SQQ48ju6rqkGOQPD3/9laSB91ht+pVnq97/3FKO+LybvXfXKiBkfxyIlumdBhIQQ==
   dependencies:
     "@langchain/langgraph-checkpoint" "^1.1.5"
-    "@langchain/langgraph-sdk" "~1.10.0"
-    "@langchain/protocol" "^0.0.18"
+    "@langchain/langgraph-sdk" "~1.12.1"
+    "@langchain/protocol" "^0.0.19"
     "@standard-schema/spec" "1.1.0"
 
 "@langchain/mongodb@^1.3.0":
@@ -1148,11 +1148,6 @@
   integrity sha512-enfD7hkbiXzoA3Uq8sRan5PX0I9iLliFTJbkW7MeLf90c5lR1hNj31VN0Ep9OlvmBPgkB1viMObl9rPerAe3gQ==
   dependencies:
     flat "^5.0.2"
-
-"@langchain/protocol@^0.0.18":
-  version "0.0.18"
-  resolved "https://registry.npmjs.org/@langchain/protocol/-/protocol-0.0.18.tgz#6d96155e7263c958fbce6d4b7241b4725b72fbad"
-  integrity sha512-XW1egQtPfsGI41w2AMZNFZrUIwFSQHTjVMZs0OaTpCAvht/QLoaPN8FQcsysMVypOhupG28J29yOorrc70otBQ==
 
 "@langchain/protocol@^0.0.19":
   version "0.0.19"
