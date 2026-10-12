@@ -53,6 +53,8 @@
     "typescript": "^5.9.3"
   },
   "resolutions": {
+    "undici": "7.29.1",
+    "handlebars": "4.7.10",
     "convict": "^6.2.5",
     "form-data": "^4.0.6"
   },
