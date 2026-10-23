@@ -27,7 +27,7 @@
     "@langchain/openai": "^1.6.0",
     "@langchain/pinecone": "^1.0.3",
     "@pinecone-database/pinecone": "^9.0.0",
-    "langchain": "^1.5.10",
+    "langchain": "^1.5.14",
     "mongodb": "^7.7.0",
     "ts-node": "^10.9.2",
     "uuid": "^14.0.2",
