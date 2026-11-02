@@ -549,10 +549,10 @@
   resolved "https://registry.yarnpkg.com/@dual-bundle/import-meta-resolve/-/import-meta-resolve-4.2.1.tgz#cd0b25b3808cd9e684cd6cd549bbf8e1dcf05ee7"
   integrity sha512-id+7YRUgoUX6CgV0DtuhirQWodeeA7Lf4i2x71JS/vtA5pRb/hIGWlw+G6MeXvsM+MXrz0VAydTGElX1rAfgPg==
 
-"@elastic/elasticsearch@^9.5.0":
-  version "9.5.0"
-  resolved "https://registry.npmjs.org/@elastic/elasticsearch/-/elasticsearch-9.5.0.tgz#97699f53a9dccbc83281c7c6ca9a3c7310af4f1b"
-  integrity sha512-6PApbQaAgVHpOvZJrAUSMrU+Nm2PznuIuTUoV29jCezL9Yze1keptiTvtsMqBsnw8v8wvfN6e4L1RTlwa5624A==
+"@elastic/elasticsearch@^9.5.1":
+  version "9.5.1"
+  resolved "https://registry.yarnpkg.com/@elastic/elasticsearch/-/elasticsearch-9.5.1.tgz#99566332aad4f2dc12e9fd0b2d87afb71e49591d"
+  integrity sha512-2ZZqCmgGPjSYn+OphFRYm9g46KVINA0i8fRmlPHJC60RvJeFB6NSHO0nKKOOYhm3WRXyGkLu1xkdXe724fnmnA==
   dependencies:
     "@elastic/transport" "^9.4.0"
     tslib "^2.4.0"
