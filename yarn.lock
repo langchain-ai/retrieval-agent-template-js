@@ -1234,10 +1234,10 @@
     "@parcel/watcher-win32-arm64" "2.6.0"
     "@parcel/watcher-win32-x64" "2.6.0"
 
-"@pinecone-database/pinecone@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@pinecone-database/pinecone/-/pinecone-9.0.0.tgz#6bd1fd5307533df99e384792ca8bfdfdb8b55051"
-  integrity sha512-2SEZEGbQPJTXWiRKSQJghqe7XjfmMRtLvkCdjPc5o+vxTa4ufgSid8j2wd+uQkX2B+n6h8+82SGGeTLttvGZGA==
+"@pinecone-database/pinecone@^9.1.0":
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/@pinecone-database/pinecone/-/pinecone-9.1.0.tgz#1614de77ae4f35cb2af79b1dc9fa955346a2f48b"
+  integrity sha512-+lFTXKgvVc28w83WN7ipcxkxr+MxQaxLhN7ICr7/J+eZ/Uw3/lZ8wMpub3CgpC4gHCY+Gmli2n25JgGGDdnHoA==
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
