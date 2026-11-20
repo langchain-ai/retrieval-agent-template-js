@@ -4189,10 +4189,10 @@ mongodb@^6.20.0:
     bson "^6.10.4"
     mongodb-connection-string-url "^3.0.2"
 
-mongodb@^7.8.0:
-  version "7.8.0"
-  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-7.8.0.tgz#d9f7a9d40caecbdaef9a34ed6806c39c4571615a"
-  integrity sha512-p2NKagbQ41+daACG/ZSvhTzeAo+DoEyWE9Cmpf/SyP3pTC43+X0mwKE/44PpKtCxp5wOxnXz+t2pXEZRSkt9Yg==
+mongodb@^7.9.0:
+  version "7.9.0"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-7.9.0.tgz#3405443ee76a8a28070734143843a23d3c89afaa"
+  integrity sha512-HfpNb8qmfmNxno+Ml5JgHn/nyshK+8xF4ESLCXedRKuGLGRyAvkjcpjk19T2Q+rqC6/FlnZKll4if21R6xs/Tg==
   dependencies:
     "@mongodb-js/saslprep" "^1.5.0"
     bson "^7.3.2"
