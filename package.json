@@ -56,7 +56,13 @@
     "undici": "7.30.2",
     "handlebars": "4.7.10",
     "convict": "^6.2.5",
-    "form-data": "^4.0.6"
+    "form-data": "^4.0.6",
+    "**/@typescript-eslint/typescript-estree/minimatch": "11.0.1",
+    "**/@jest/reporters/glob/minimatch": "11.0.1",
+    "**/jest-config/glob/minimatch": "11.0.1",
+    "**/jest-runtime/glob/minimatch": "11.0.1",
+    "**/test-exclude/minimatch": "11.0.1",
+    "**/test-exclude/glob/minimatch": "11.0.1"
   },
   "overrides": {
     "convict": "^6.2.5",
